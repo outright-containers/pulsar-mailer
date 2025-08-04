@@ -15,7 +15,8 @@
         }
     ],
     "require": {
-        "ophelios/zephyrus": "dev-main"
+        "ophelios/zephyrus": "dev-main",
+        "aws/aws-sdk-php": "^3.228"
     },
     "minimum-stability": "dev"
 }
