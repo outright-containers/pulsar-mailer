@@ -30,3 +30,31 @@ files into the project with the standard Publisher class.
 ```shell
 composer update
 ```
+
+### Configurations
+This library requires adding properties to the project's configurations to identify the AWS credentials. First, add in 
+the `.env` file the following constants.
+
+```dotenv
+# AWS user configuration key
+AWS_KEY="<YOUR_KEY>"
+AWS_SECRET="<YOUR_SECRET>"
+```
+
+Then, add the following into the `config.yml` file.
+
+```yml
+mailer:
+  transport: !php/const MAILER_TRANSPORT
+  default_from_address: "info@ophelios.com"
+  default_from_name: "Ophelios"
+  aws:
+    api_key: !php/const AWS_KEY
+    api_secret: !php/const AWS_SECRET
+  smtp:
+    host: !php/const MAILER_SMTP_HOST
+    port: !php/const MAILER_SMTP_PORT
+    encryption: !php/const MAILER_SMTP_ENCRYPTION
+    username: !php/const MAILER_SMTP_USERNAME
+    password: !php/const MAILER_SMTP_PASSWORD
+```
