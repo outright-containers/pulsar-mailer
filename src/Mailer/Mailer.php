@@ -3,6 +3,7 @@
 use Pulsar\Mailer\Configurations\MailerConfiguration;
 use Zephyrus\Core\Application;
 use Zephyrus\Core\Configuration;
+use Zephyrus\Core\Configuration\LocalizationConfiguration;
 
 class Mailer extends \Zephyrus\Core\Mailer\Mailer
 {
@@ -13,14 +14,22 @@ class Mailer extends \Zephyrus\Core\Mailer\Mailer
         parent::__construct($configurations);
     }
 
-    public function setTemplate(string $template, array $data = []): void
+    public function setTemplate(string $template, array $data = [], ?string $locale = null): void
     {
+        $localization = Application::getInstance()->getLocalization();
+        $originalLocale = $localization->getLocale();
+        if (!is_null($locale)) {
+            $localization->changeLanguage(new LocalizationConfiguration(['locale' => $locale]));
+        }
         $baseUrl = Application::getInstance()->getRequest()->getUrl()->getBaseUrl();
         parent::setTemplate($template, array_merge([
             'base_url' => $baseUrl,
             'version' => Application::getInstance()->getVersion(),
             'project' => Configuration::getApplication('project')
         ], $data));
+        if (!is_null($locale)) {
+            $localization->changeLanguage(new LocalizationConfiguration(['locale' => $originalLocale]));
+        }
     }
 
     public function send(bool $asHtml = true): string
